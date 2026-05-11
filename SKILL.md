@@ -225,12 +225,34 @@ Landing URL: `https://sergeyramas.github.io/<slug>-skill/`
 
 File: `~/Documents/ramas-site/content/items/<slug>.mdx`
 
+Before writing the card, launch a separate image-generation subagent dedicated only to the cover image.
+
+Cover brief requirements:
+- Generate a **raster** cover image, never SVG and never a placeholder
+- Save final asset at `~/Documents/ramas-site/public/covers/<slug>.webp`
+- Minimum size `800x500`, target aspect ratio `16:10`, safe for `object-cover`
+- Match ramas-site visual language: editorial still-life, calm cinematic lighting, warm graphite background, terracotta `#DC7A4F`, bone `#F2EDE3`, subtle grain, one focal object
+- No people, no readable text, no logos, no emoji, no generic AI gradients
+- Reflect the skill's input → process → result metaphorically, not as a screenshot
+
+After the cover subagent finishes:
+- Verify the file exists at `public/covers/<slug>.webp`
+- Use the cover path in the card frontmatter
+- Run the site build to confirm MDX + Velite still pass
+- Commit both the MDX card and the cover asset
+
+Frontmatter must include:
+```yaml
+cover: /covers/<slug>.webp
+```
+
 ```markdown
 ---
 title: "<Title>"
 slug: "<slug>"
 kind: solution
 summary: "<≤280 char pitch: что делает, для кого, в чём польза>"
+cover: "/covers/<slug>.webp"
 externalUrl: "https://github.com/sergeyramas/<slug>-skill"
 tags: [skills, claude-code, <additional tags>]
 status: live
@@ -256,10 +278,21 @@ curl -fsSL https://raw.githubusercontent.com/sergeyramas/<slug>-skill/main/insta
 [Полная инструкция и исходники →](https://github.com/sergeyramas/<slug>-skill)
 ```
 
+Before committing — verify summary ≤ 280 chars (Velite schema limit):
+```bash
+echo -n "<your summary>" | wc -c   # must be ≤ 280
+```
+
+Before committing — verify the cover exists and the site still builds:
+```bash
+test -f ~/Documents/ramas-site/public/covers/<slug>.webp
+cd ~/Documents/ramas-site && npm run build
+```
+
 Commit and push:
 ```bash
 cd ~/Documents/ramas-site
-git add content/items/<slug>.mdx
+git add content/items/<slug>.mdx public/covers/<slug>.webp
 git commit -m "Add skill card: <slug>"
 git push
 ```
