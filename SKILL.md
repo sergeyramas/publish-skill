@@ -227,21 +227,26 @@ File: `~/Documents/ramas-site/content/items/<slug>.mdx`
 
 Before writing the card, launch a separate image-generation subagent dedicated only to the cover image.
 
+Agent-specific rule:
+- In **Codex**, the subagent must generate a real raster image asset
+- In **Claude Code**, if image generation is unavailable, fall back to a manually authored SVG cover instead of blocking the workflow
+
 Cover brief requirements:
-- Generate a **raster** cover image, never SVG and never a placeholder
-- Save final asset at `~/Documents/ramas-site/public/covers/<slug>.webp`
+- For **Codex**: generate a **raster** cover image, never SVG and never a placeholder
+- For **Claude Code without image generation**: create an SVG fallback at `~/Documents/ramas-site/public/covers/<slug>.svg`
+- Save final raster asset at `~/Documents/ramas-site/public/covers/<slug>.webp`
 - Minimum size `800x500`, target aspect ratio `16:10`, safe for `object-cover`
 - Match ramas-site visual language: editorial still-life, calm cinematic lighting, warm graphite background, terracotta `#DC7A4F`, bone `#F2EDE3`, subtle grain, one focal object
 - No people, no readable text, no logos, no emoji, no generic AI gradients
 - Reflect the skill's input → process → result metaphorically, not as a screenshot
 
 After the cover subagent finishes:
-- Verify the file exists at `public/covers/<slug>.webp`
+- Verify the chosen cover file exists at `public/covers/<slug>.webp` or `public/covers/<slug>.svg`
 - Use the cover path in the card frontmatter
 - Run the site build to confirm MDX + Velite still pass
 - Commit both the MDX card and the cover asset
 
-Frontmatter must include:
+Frontmatter must include the actual chosen path:
 ```yaml
 cover: /covers/<slug>.webp
 ```
@@ -285,14 +290,14 @@ echo -n "<your summary>" | wc -c   # must be ≤ 280
 
 Before committing — verify the cover exists and the site still builds:
 ```bash
-test -f ~/Documents/ramas-site/public/covers/<slug>.webp
+test -f ~/Documents/ramas-site/public/covers/<slug>.webp || test -f ~/Documents/ramas-site/public/covers/<slug>.svg
 cd ~/Documents/ramas-site && npm run build
 ```
 
 Commit and push:
 ```bash
 cd ~/Documents/ramas-site
-git add content/items/<slug>.mdx public/covers/<slug>.webp
+git add content/items/<slug>.mdx public/covers/<slug>.webp public/covers/<slug>.svg
 git commit -m "Add skill card: <slug>"
 git push
 ```

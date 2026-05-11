@@ -12,14 +12,14 @@ Every day useful processes emerge in Claude chats — how to publish an eBay lis
 
 **Before:** Useful process stays in the chat, lost on compact. To share — you copy a prompt to Notion, formatting breaks, no install instructions, no requirements list.
 
-**After:** One phrase → local SKILL.md installed + public GitHub repo with bilingual README + GitHub Pages landing + card on your site with a generated raster cover image. Others install it with one `curl` command.
+**After:** One phrase → local SKILL.md installed + public GitHub repo with bilingual README + GitHub Pages landing + card on your site. In Codex the cover is a generated raster image; in Claude Code it can fall back to SVG if image generation is unavailable.
 
 What gets created per skill:
 
 1. `~/.claude/skills/<slug>/SKILL.md` — immediately triggers in your agent
 2. `github.com/sergeyramas/<slug>-skill` — public repo with README, install.sh, _config.yml
 3. `sergeyramas.github.io/<slug>-skill/` — GitHub Pages landing
-4. Card on `sergeyramas.vercel.app` with generated raster cover image — Vercel auto-deploys
+4. Card on `sergeyramas.vercel.app` with generated cover asset — raster in Codex, SVG fallback in Claude Code if needed
 
 ## Requirements
 
@@ -60,7 +60,7 @@ Tell your agent one of these trigger phrases after a process worked:
 
 ## How it works
 
-The skill distills the process from the current chat (problem → steps → anti-patterns → requirements), generates a bilingual README with before/after framing and SEO keywords, creates the GitHub repo with GitHub Pages enabled, launches a separate image-generation subagent for a raster cover image, and adds an MDX card to your Vercel site. Uses Anthropic Skill Specification format for SKILL.md frontmatter.
+The skill distills the process from the current chat (problem → steps → anti-patterns → requirements), generates a bilingual README with before/after framing and SEO keywords, creates the GitHub repo with GitHub Pages enabled, launches a separate cover subagent, and adds an MDX card to your Vercel site. In Codex that subagent generates a raster image; in Claude Code it may fall back to SVG if image generation is unavailable. Uses Anthropic Skill Specification format for SKILL.md frontmatter.
 
 ---
 
@@ -74,14 +74,14 @@ The skill distills the process from the current chat (problem → steps → anti
 
 **До:** процесс остаётся в чате, теряется при компакте. Чтобы поделиться — копируешь промт в Notion, теряется форматирование, нет инструкции по установке.
 
-**После:** одна фраза → SKILL.md установлен локально + публичный репо с двуязычным README + GitHub Pages лендинг + карточка на сайте с отдельной сгенерированной обложкой. Друзья устанавливают через одну `curl`-команду.
+**После:** одна фраза → SKILL.md установлен локально + публичный репо с двуязычным README + GitHub Pages лендинг + карточка на сайте с отдельной обложкой. В Codex это сгенерированная картинка, в Claude Code при отсутствии image generation допускается SVG fallback.
 
 ### За один вызов создаётся
 
 1. `~/.claude/skills/<slug>/SKILL.md` — сразу триггерится у тебя
 2. Публичный GitHub-репо с README (EN+RU), install.sh, _config.yml
 3. GitHub Pages лендинг
-4. MDX-карточка на твоём сайте с raster-обложкой (Vercel автодеплоит)
+4. MDX-карточка на твоём сайте с отдельной обложкой: raster для Codex, SVG fallback для Claude Code при необходимости
 
 ### Установка
 
