@@ -73,53 +73,115 @@ Working dir: `~/Documents/skills-published/<slug>-skill/` (mkdir -p)
 
 Files:
 - `SKILL.md` — copy of the local skill
-- `README.md` — human-readable landing (see template below)
+- `README.md` — bilingual landing: **English first**, Russian below (see template)
 - `install.sh` — one-command installer
-- `_config.yml` — GitHub Pages config (`theme: jekyll-theme-cayman`)
+- `_config.yml` — GitHub Pages config with SEO fields
 
-**README.md template:**
+**SEO requirements for README.md:**
+- H1 must contain the primary English keyword (e.g. "Claude Code skill", "AI agent automation")
+- First paragraph must contain 3–5 SEO keywords naturally
+- H2 headings should use searchable terms ("Installation", "How it works", "Requirements")
+- GitHub topics set via `gh repo edit --add-topic` after creation (4–6 tags)
+
+**SEO keywords to always include** (adapt to topic):
+`claude code`, `claude code skill`, `ai agent`, `anthropic claude`, `llm automation`, `codex cli`
+
+**README.md template (English first, Russian second):**
 ```markdown
-# <Title>
+# <Title> — <Primary English keyword phrase>
 
-<One-line elevator pitch>
+> <One-line pitch in English, includes 2-3 SEO keywords>
 
-## Что делает
+**Claude Code skill** | Works with: Codex CLI · Gemini CLI
 
-<2-4 sentences describing the outcome the user gets>
+<!-- ENGLISH -->
 
-## Требования
+## What it does
 
-- **Agent:** Claude Code | Codex CLI | Gemini CLI (mark which)
+<2-4 sentences: problem → solution → outcome. Use keywords naturally.>
+
+**Before:** <pain point in one line>
+**After:** <outcome in one line>
+
+## Requirements
+
+- **Agent:** Claude Code (primary) | Codex CLI | Gemini CLI
 - **Tools / MCPs:** <list>
-- **Accounts / API keys:** <list>
-- **OS:** macOS / Linux / любая
+- **Accounts / API keys:** <list or "none">
+- **OS:** macOS / Linux
 
-## Установка
+## Installation
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sergeyramas/<slug>-skill/main/install.sh | bash
 ```
 
-Или вручную:
+Or manually:
 ```bash
 git clone https://github.com/sergeyramas/<slug>-skill ~/.claude/skills/<slug>
 ```
 
-## Использование
+Restart Claude Code / Codex after install.
 
-Просто напиши агенту одну из триггер-фраз:
-- "<trigger 1>"
-- "<trigger 2>"
+## Usage
 
-Скилл активируется и проведёт по процессу.
+Tell your agent one of these trigger phrases:
+- "<trigger EN 1>"
+- "<trigger EN 2>"
 
-## Что под капотом
+## How it works
 
-<Brief explanation of the process, links to relevant tools/MCPs>
+<Brief explanation of the internals, 3-5 sentences.>
 
-## Автор
+---
 
-[@sergeyramas](https://github.com/sergeyramas) — публикую удачные процессы как переиспользуемые скиллы на [sergeyramas.vercel.app](https://sergeyramas.vercel.app).
+<!-- RUSSIAN -->
+
+## На русском
+
+### Что делает
+
+<2-4 предложения: проблема → решение → результат.>
+
+**До:** <боль в одну строку>
+**После:** <результат в одну строку>
+
+### Установка
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sergeyramas/<slug>-skill/main/install.sh | bash
+```
+
+### Триггер-фразы
+
+- "<trigger RU 1>"
+- "<trigger RU 2>"
+
+---
+
+## Author
+
+[@sergeyramas](https://github.com/sergeyramas) — I publish proven AI agent processes as reusable skills at [sergeyramas.vercel.app](https://sergeyramas.vercel.app).
+```
+
+**_config.yml template (with SEO):**
+```yaml
+theme: jekyll-theme-cayman
+title: "<Title> — <Primary keyword>"
+description: "<1-2 sentences with top 4 keywords. Shown in Google snippet.>"
+plugins:
+  - jekyll-seo-tag
+```
+
+**After repo creation — add GitHub topics:**
+```bash
+gh repo edit sergeyramas/<slug>-skill \
+  --add-topic claude-code \
+  --add-topic claude-skill \
+  --add-topic ai-agent \
+  --add-topic anthropic \
+  --add-topic llm-automation \
+  --add-topic <topic-specific-tag>
 ```
 
 **install.sh:**

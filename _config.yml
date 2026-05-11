@@ -1,3 +1,5 @@
 theme: jekyll-theme-cayman
-title: "Publish Skill — упаковка процессов в переиспользуемые скиллы"
-description: "Claude Code мета-скилл: превращает удачный процесс в локальный SKILL.md + публичный GitHub-репо + карточку на сайте. Одной командой."
+title: "Publish Skill — Claude Code Skill for Packaging AI Agent Processes"
+description: "Claude Code meta-skill: package any successful AI agent process into a reusable skill with GitHub repo, GitHub Pages landing, and site card. One trigger phrase. Works with Codex CLI, Gemini CLI."
+plugins:
+  - jekyll-seo-tag

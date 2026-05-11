@@ -1,114 +1,105 @@
-# Publish Skill — упаковка процессов в переиспользуемые скиллы
+# Publish Skill — Claude Code Skill for Packaging AI Agent Processes
 
-Превращает удачный процесс из текущей Claude-сессии в установленный локальный skill + публичный GitHub-репо с инструкцией + карточку на твоём сайте. Одной командой.
+> Turn any successful Claude session process into a reusable skill: local SKILL.md + public GitHub repo + landing page + site card. One trigger phrase.
 
----
+**Claude Code meta-skill** | Works with: Codex CLI · Gemini CLI
 
-## Зачем это нужно
+<!-- ENGLISH -->
 
-### Проблема
+## What it does
 
-Каждый день в чатах с Claude рождаются полезные процессы: «как опубликовать листинг на eBay», «как переносить контекст между сессиями», «как делать ингест видео-урока в туториал». Но они умирают вместе с сессией. В следующий раз ты:
+Every day useful processes emerge in Claude chats — how to publish an eBay listing, how to transfer session context, how to ingest a video lesson into a tutorial. They die with the session. This meta-skill packages them into installable, shareable skills.
 
-- Заново объясняешь шаги
-- Забываешь edge-cases
-- Не можешь поделиться с другими
-- Не помнишь какие MCP / API ключи нужны
+**Before:** Useful process stays in the chat, lost on compact. To share — you copy a prompt to Notion, formatting breaks, no install instructions, no requirements list.
 
-### До
+**After:** One phrase → local SKILL.md installed + public GitHub repo with bilingual README + GitHub Pages landing + card on your site. Others install it with one `curl` command.
 
-- Полезный процесс остаётся в чате, теряется при компакте
-- Чтобы поделиться — копируешь промт в Notion / Telegram, теряется форматирование, нет установки
-- Нет единого места где видны все твои наработки
+What gets created per skill:
 
-### После
+1. `~/.claude/skills/<slug>/SKILL.md` — immediately triggers in your agent
+2. `github.com/sergeyramas/<slug>-skill` — public repo with README, install.sh, _config.yml
+3. `sergeyramas.github.io/<slug>-skill/` — GitHub Pages landing
+4. Card on `sergeyramas.vercel.app` — Vercel auto-deploys
 
-Одна команда упаковки даёт:
-1. **Локальный SKILL.md** в `~/.claude/skills/<slug>/` — сразу триггерится у тебя
-2. **Публичный GitHub-репо** `sergeyramas/<slug>-skill` с README (до/после, требования, install, триггеры)
-3. **GitHub Pages landing** для красивой ссылки
-4. **MDX-карточку** на твоём сайте (sergeyramas.vercel.app) — Vercel автодеплоит
-5. **One-line install** для друзей: `curl -fsSL .../install.sh | bash`
+## Requirements
 
-Твой сайт превращается в публичный каталог твоих процессов.
-
----
-
-## Требования
-
-- **Agent:** Claude Code (использует Read/Write/Bash инструменты + Skill API)
-- **Tools / CLI:**
-  - `gh` (GitHub CLI), залогинен на нужный аккаунт
-  - `git`
-  - `bash`
-- **Accounts:**
-  - GitHub аккаунт (по умолчанию `sergeyramas` — поменяй в SKILL.md под себя)
-  - Vercel-проект подключённый к репо твоего сайта (опционально, для карточек)
-- **Локальная структура:**
-  - `~/.claude/skills/` для локальной установки скиллов
-  - `~/Documents/<твой-сайт>/content/items/` если хочешь карточки (формат Velite MDX)
+- **Agent:** Claude Code (primary) | Codex CLI | Gemini CLI
+- **Tools / CLI:** `gh` (GitHub CLI, authenticated) · `git` · `bash`
+- **Accounts:** GitHub account · Vercel-connected site repo (optional, for cards)
+- **Local structure:** `~/.claude/skills/` for skills · `~/Documents/<your-site>/content/items/` for MDX cards (Velite format)
 - **OS:** macOS / Linux
 
----
-
-## Установка
+## Installation
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sergeyramas/publish-skill/main/install.sh | bash
 ```
 
-Или вручную:
+Or manually:
 ```bash
 git clone https://github.com/sergeyramas/publish-skill ~/.claude/skills/publish-skill
 ```
 
-После установки **открой SKILL.md и замени** `sergeyramas` и `~/Documents/ramas-site` на свои значения (GitHub username и путь к твоему сайту).
+**After installing:** open `~/.claude/skills/publish-skill/SKILL.md` and replace `sergeyramas` with your GitHub username and `~/Documents/ramas-site` with your site repo path.
 
----
+Restart Claude Code / Codex after install.
 
-## Использование
+## Usage
 
-В конце сессии где у тебя получился удачный процесс, скажи Claude:
+Tell your agent one of these trigger phrases after a process worked:
 
-**По-русски:**
-- "упакуй это в скилл"
-- "сделай из этого навык"
-- "опубликуй процесс"
-- "поделись этим"
-
-**In English:**
+**English triggers:**
 - "publish skill"
 - "ship this as a skill"
 - "package this process"
 
-Скилл сам:
-1. Дистиллирует процесс из текущего чата (проблема → шаги → антипаттерны)
-2. Спрашивает уточнения если что-то неясно
-3. Создаёт всё нужное и пушит
+**Russian triggers:**
+- "упакуй это в скилл"
+- "сделай из этого навык"
+- "опубликуй процесс"
+
+## How it works
+
+The skill distills the process from the current chat (problem → steps → anti-patterns → requirements), generates a bilingual README with before/after framing and SEO keywords, creates the GitHub repo with GitHub Pages enabled, and adds an MDX card to your Vercel site. Uses Anthropic Skill Specification format for SKILL.md frontmatter.
 
 ---
 
-## Что под капотом
+<!-- RUSSIAN -->
 
-Скилл следует Anthropic Skill Specification: frontmatter с `name` + `description` (триггеры на двух языках), тело с секциями Goal / When NOT / Requirements / Process / Anti-patterns. Использует Velite-формат для MDX-карточек (можно адаптировать под Next.js / Astro / любой статический генератор).
+## На русском
 
-GitHub Pages работает через `_config.yml` с темой `jekyll-theme-cayman` — простая установка через `gh api`.
+### Что делает
+
+Мета-скилл для Claude Code: превращает удачный процесс из текущего чата в установленный локальный skill + публичный GitHub-репо + лендинг + карточку на сайте.
+
+**До:** процесс остаётся в чате, теряется при компакте. Чтобы поделиться — копируешь промт в Notion, теряется форматирование, нет инструкции по установке.
+
+**После:** одна фраза → SKILL.md установлен локально + публичный репо с двуязычным README + GitHub Pages лендинг + карточка на сайте. Друзья устанавливают через одну `curl`-команду.
+
+### За один вызов создаётся
+
+1. `~/.claude/skills/<slug>/SKILL.md` — сразу триггерится у тебя
+2. Публичный GitHub-репо с README (EN+RU), install.sh, _config.yml
+3. GitHub Pages лендинг
+4. MDX-карточка на твоём сайте (Vercel автодеплоит)
+
+### Установка
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sergeyramas/publish-skill/main/install.sh | bash
+```
+
+После установки замени в `SKILL.md`: `sergeyramas` → твой GitHub username, `~/Documents/ramas-site` → путь к твоему сайту.
+
+### Триггер-фразы
+
+- "упакуй это в скилл", "опубликуй процесс", "сделай из этого навык"
+- "publish skill", "ship this as a skill"
 
 ---
 
-## Адаптация под себя
+## Author
 
-Базовый скилл заточен под мой стек (`sergeyramas` / `~/Documents/ramas-site` с Velite-MDX). Чтобы перенести под себя:
+[@sergeyramas](https://github.com/sergeyramas) — I publish proven AI agent processes as reusable skills at [sergeyramas.vercel.app](https://sergeyramas.vercel.app).
 
-1. В `SKILL.md` замени `sergeyramas` на свой GitHub username
-2. Замени `~/Documents/ramas-site` на путь к своему сайту
-3. Если у тебя другой формат content (не Velite-MDX) — адаптируй Step 6 под формат своего сайта
-4. Если нет своего сайта — можно убрать Step 6 совсем, оставив только GitHub-репо
-
----
-
-## Автор
-
-[@sergeyramas](https://github.com/sergeyramas) — публикую удачные процессы как переиспользуемые скиллы на [sergeyramas.vercel.app](https://sergeyramas.vercel.app).
-
-Этот скилл — мета-скилл: им самим я и публикую все остальные.
+*This meta-skill was used to publish itself.*
